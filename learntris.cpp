@@ -11,7 +11,7 @@ int main() {
     {
 		std::cin >> x;
 		if (x == 'q') break;
-        //else if (x == 'p') m.print_board(false);
+        else if (x == 'p') m.printGrid();
         //else if (x == 'P') m.print_board(true);
 		
         //else if (x == 'g') m.given();

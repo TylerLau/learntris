@@ -1,19 +1,19 @@
-//#ifndef __MATRIX_H__
-//#define __MATRIX_H__
+#ifndef __MATRIX_H__
+#define __MATRIX_H__
 
-#include <iostream>
-#include <vector>
 #include <memory>
-#include "Tetramino.h"
+#include <iostream>
+#include "cell.h"
+#include "tetramino.h"
 
 class Matrix {
     // Public member functions
     public:
         Matrix();    
-        
+        void printGrid();
     // Private member functions
     private:
-
+        void initGrid();
 
     // Public member variables
     public:
@@ -22,10 +22,12 @@ class Matrix {
     private:
         int lines;      // # of lines cleared
         int score;      // User score
-        // Pointer to the currently active piece
-        // 22x10 Vector table of pointers to pieces
-        std::unique_ptr<Tetramino> active_piece;
-        // std::vector<std::vector<std::unique_ptr<Tetramino>>> grid
+        
+        // Pointer to the current active piece
+        std::shared_ptr<Tetramino> active_piece;
+
+        // 22x10 array of pointers to pieces
+        Cell grid[22][10];
 };   
 
-//#endif
+#endif  // __MATRIX_H__
