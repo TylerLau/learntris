@@ -14,16 +14,15 @@ int main() {
         else if (x == 'p') m.printGrid();
         //else if (x == 'P') m.print_board(true);
 		
-        //else if (x == 'g') m.given();
-        //else if (x == 'c') m.clear();
-        //else if (x == 's') m.step();
+        else if (x == 'g') m.given();
+        else if (x == 'c') m.clear();
+        else if (x == 's') m.step();
 		
-        //else if (x == '?')
-        //{
-        //	std::cin >> x;
-		//	if (x == 's') std::cout << m.get_score() << std::endl;
-		//	if (x == 'n') std::cout << m.get_lines() << std::endl;
-		//}
+        else if (x == '?') {
+        	std::cin >> x;
+		    if (x == 's') std::cout << m.get_score() << std::endl;
+			if (x == 'n') std::cout << m.get_lines() << std::endl;
+		}
 		
 		//else if (x == 'I') m.set_active('I');
 		//else if (x == 'O') m.set_active('O');

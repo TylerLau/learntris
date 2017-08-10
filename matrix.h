@@ -11,6 +11,11 @@ class Matrix {
     public:
         Matrix();    
         void printGrid();
+        void given();
+        void clear();
+        int get_score();
+        int get_lines();
+        void step(); 
     // Private member functions
     private:
         void initGrid();
