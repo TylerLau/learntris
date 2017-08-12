@@ -5,12 +5,17 @@ Cell::Cell() {
     current_piece = nullptr;
 }
 
+void Cell::setCoordinates(int x, int y) {
+    coordinate = std::make_tuple(x,y);
+}
+
 auto Cell::assign(std::shared_ptr<Tetramino>& obj) -> int {
     // Return: 0 if successful, 1 if nto successful
     if (current_piece != nullptr) return 1; // Error, cell is occupied
     else {
-        label = obj->type();
-        current_piece = obj;
+        this->label = obj -> type();
+        this->current_piece = obj;
+        current_piece -> add(coordinate);
         return 0;
     }
 }
@@ -19,6 +24,7 @@ auto Cell::remove() -> int {
     // Return: 0 if successful, 1 if not successful
     if (current_piece != nullptr) {
         label = ".";
+        current_piece -> remove(coordinate);
         current_piece = nullptr;
         return 0;
     }
@@ -31,4 +37,9 @@ auto Cell::checkOccupied() -> std::shared_ptr<Tetramino> {
     else return nullptr;
 }
 
-
+auto Cell::isActive() -> bool {
+    // Return: Whether or not tetrimino held by cell is marked as active
+    bool temp = false;
+    if (current_piece != nullptr) temp = (*current_piece).active;
+    return temp;
+}
