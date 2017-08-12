@@ -197,34 +197,34 @@ void Matrix::initPiece(char type) {
             assert(grid[1][5].assign(active_piece) != 1);
             break;
         case 'S':
+            assert(grid[0][4].assign(active_piece) != 1);
             assert(grid[0][5].assign(active_piece) != 1);
-            assert(grid[0][6].assign(active_piece) != 1);
+            assert(grid[1][3].assign(active_piece) != 1);
             assert(grid[1][4].assign(active_piece) != 1);
-            assert(grid[1][5].assign(active_piece) != 1);
             break; 
         case 'Z':
+            assert(grid[0][3].assign(active_piece) != 1);
             assert(grid[0][4].assign(active_piece) != 1);
-            assert(grid[0][5].assign(active_piece) != 1);
+            assert(grid[1][4].assign(active_piece) != 1);
             assert(grid[1][5].assign(active_piece) != 1);
-            assert(grid[1][6].assign(active_piece) != 1);
             break;
         case 'J':
-            assert(grid[0][4].assign(active_piece) != 1);
+            assert(grid[0][3].assign(active_piece) != 1);
+            assert(grid[1][3].assign(active_piece) != 1);
             assert(grid[1][4].assign(active_piece) != 1);
             assert(grid[1][5].assign(active_piece) != 1);
-            assert(grid[1][6].assign(active_piece) != 1);
             break;
         case 'L':
-            assert(grid[0][6].assign(active_piece) != 1);
+            assert(grid[0][5].assign(active_piece) != 1);
+            assert(grid[1][3].assign(active_piece) != 1);
             assert(grid[1][4].assign(active_piece) != 1);
             assert(grid[1][5].assign(active_piece) != 1);
-            assert(grid[1][6].assign(active_piece) != 1);
             break;
         case 'T':
-            assert(grid[0][5].assign(active_piece) != 1);
+            assert(grid[0][4].assign(active_piece) != 1);
+            assert(grid[1][3].assign(active_piece) != 1);
             assert(grid[1][4].assign(active_piece) != 1);
             assert(grid[1][5].assign(active_piece) != 1);
-            assert(grid[1][6].assign(active_piece) != 1);
             break;
         default:
             break;
