@@ -1,4 +1,5 @@
 #include "tetramino.h"
+#include "cell.h"
 
 Tetramino::Tetramino(std::string _name) {
     name = _name;
@@ -9,24 +10,26 @@ auto Tetramino::type() -> std::string {
     return name;
 }
 
-auto Tetramino::add(const std::tuple<int,int> _coord) -> int {
-    auto it = std::find(cell_list.begin(), cell_list.end(), _coord);
-
-    if (it == cell_list.end()) {
-        cell_list.push_back(_coord);
-        return 0;
+auto Tetramino::add(Cell * _cell) -> int {
+    for (auto itr = cells.begin(); itr != cells.end(); ++itr) {
+        if (*itr == _cell) return 1;
     }
-    else return 1;
+    cells.push_back(_cell);
+    return 0;
 }
 
-auto Tetramino::remove(const std::tuple<int,int> _coord) -> int {
-    auto it = std::find(cell_list.begin(), cell_list.end(), _coord);
-
-    if (it != cell_list.end()) {
-        cell_list.erase(it);
-        return 0;
+auto Tetramino::remove(Cell * _cell) -> int {
+    for (auto itr = cells.begin(); itr != cells.end(); ++itr) {
+       if (*itr == _cell) {
+            cells.erase(itr);
+            return 0;
+       }
     }
-    else return 1;
+    return 1; 
+}
+
+auto Tetramino::getCells() -> std::vector<Cell*> {
+    return cells;
 }
 
 auto Tetramino::rotateCW() -> int {
@@ -39,6 +42,33 @@ auto Tetramino::rotateCCW() -> int {
     orientation--;
     if (orientation < 0) orientation = 3;
     return orientation;
+}
+
+auto Tetramino::checkLeft() -> std::vector<std::tuple<int,int>> {
+    auto c0 = std::make_tuple(cells[0]->getX(), cells[0]->getY() - 1);
+    auto c1 = std::make_tuple(cells[1]->getX(), cells[1]->getY() - 1);
+    auto c2 = std::make_tuple(cells[2]->getX(), cells[2]->getY() - 1);
+    auto c3 = std::make_tuple(cells[3]->getX(), cells[3]->getY() - 1);
+    auto cell_list = {c0, c1, c2, c3};
+    return cell_list;
+}
+
+auto Tetramino::checkRight() -> std::vector<std::tuple<int,int>> {
+    auto c0 = std::make_tuple(cells[0]->getX(), cells[0]->getY() + 1);
+    auto c1 = std::make_tuple(cells[1]->getX(), cells[1]->getY() + 1);
+    auto c2 = std::make_tuple(cells[2]->getX(), cells[2]->getY() + 1);
+    auto c3 = std::make_tuple(cells[3]->getX(), cells[3]->getY() + 1);
+    auto cell_list = {c0, c1, c2, c3};
+    return cell_list;
+}
+
+auto Tetramino::checkDown() -> std::vector<std::tuple<int,int>> {
+    auto c0 = std::make_tuple(cells[0]->getX() + 1, cells[0]->getY());
+    auto c1 = std::make_tuple(cells[1]->getX() + 1, cells[1]->getY());
+    auto c2 = std::make_tuple(cells[2]->getX() + 1, cells[2]->getY());
+    auto c3 = std::make_tuple(cells[3]->getX() + 1, cells[3]->getY());
+    auto cell_list = {c0, c1, c2, c3};
+    return cell_list;
 }
 
 //------------------------------------------------------------------
@@ -70,6 +100,7 @@ auto I_Type::print() -> int {
     }
     return 0;
 }
+
 
 
 //------------------------------------------------------------------

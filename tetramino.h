@@ -6,6 +6,9 @@
 #include <tuple>
 #include <vector>
 #include <algorithm>
+#include "cell.h"
+// Forward declaration of Cell
+class Cell;
 
 class Tetramino {
     // Public member functions
@@ -15,15 +18,18 @@ class Tetramino {
         auto type()->std::string; // Function that returns type of piece
         virtual auto print() -> int {};    // Function to print piece in 4x4
         
-        auto add(const std::tuple<int,int> _coord) -> int;
-        auto remove(const std::tuple<int,int> _coord) -> int;
-                
+        auto add(Cell * _cell) -> int;
+        auto remove(Cell * _cell) -> int;
+        
+        auto getCells() -> std::vector<Cell*>; 
+
         // Function for checking valid piece movement
-        //virtual auto checkLeft() -> std::vector<std::tuple<int,int>>; 
-        //virtual auto checkRight() -> std::vector<std::tuple<int,int>>;
-        //virtual auto checkDown() -> std::vector<std::tuple<int,int>>; 
-        //virtual auto checkCW() -> std::vector<std::tuple<int,int>>; 
-        //virtual auto checkCCW() -> std::vector<std::tuple<int,int>>; 
+        auto checkLeft() -> std::vector<std::tuple<int,int>>; 
+        auto checkRight() -> std::vector<std::tuple<int,int>>;
+        auto checkDown() -> std::vector<std::tuple<int,int>>; 
+        
+        virtual auto checkCW() -> std::vector<std::tuple<int,int>> {}; 
+        virtual auto checkCCW() -> std::vector<std::tuple<int,int>> {}; 
 
         auto rotateCW() -> int;
         auto rotateCCW() -> int;
@@ -40,7 +46,8 @@ class Tetramino {
 
     protected:
         std::string name;   // Stores letter representation of tetramino
-        std::vector<std::tuple<int,int>> cell_list;
+        //std::vector<std::tuple<int,int>> cells;
+        std::vector<Cell*> cells;
         int orientation;
 };
 
@@ -56,9 +63,6 @@ class I_Type: public Tetramino {
         
         auto print() -> int; 
 
-        //auto checkLeft() -> std::vector<std::tuple<int,int>>; 
-        //auto checkRight() -> std::vector<std::tuple<int,int>>;
-        //auto checkDown() -> std::vector<std::tuple<int,int>>; 
         //auto checkCW() -> std::vector<std::tuple<int,int>>; 
         //auto checkCCW() -> std::vector<std::tuple<int,int>>;
     private:
@@ -79,9 +83,6 @@ class T_Type: public Tetramino {
          
         auto print() -> int; 
 /*
-        auto checkLeft() -> std::vector<std::tuple<int,int>>;
-        auto checkRight() -> std::vector<std::tuple<int,int>>;
-        auto checkDown() -> std::vector<std::tuple<int,int>>; 
         auto checkCW() -> std::vector<std::tuple<int,int>>; 
         auto checkCCW() -> std::vector<std::tuple<int,int>>;
 */
@@ -103,9 +104,6 @@ class J_Type: public Tetramino {
         
         auto print() -> int; 
 /*
-        auto checkLeft() -> std::vector<std::tuple<int,int>>; 
-        auto checkRight() -> std::vector<std::tuple<int,int>>;
-        auto checkDown() -> std::vector<std::tuple<int,int>>; 
         auto checkCW() -> std::vector<std::tuple<int,int>>; 
         auto checkCCW() -> std::vector<std::tuple<int,int>>;
 */
@@ -127,9 +125,6 @@ class L_Type: public Tetramino {
         
         auto print() -> int; 
 /*
-        auto checkLeft() -> std::vector<std::tuple<int,int>>; 
-        auto checkRight() -> std::vector<std::tuple<int,int>>;
-        auto checkDown() -> std::vector<std::tuple<int,int>>; 
         auto checkCW() -> std::vector<std::tuple<int,int>>; 
         auto checkCCW() -> std::vector<std::tuple<int,int>>;
 */
@@ -151,9 +146,6 @@ class S_Type: public Tetramino {
         
         auto print() -> int; 
 /*
-        auto checkLeft() -> std::vector<std::tuple<int,int>>; 
-        auto checkRight() -> std::vector<std::tuple<int,int>>;
-        auto checkDown() -> std::vector<std::tuple<int,int>>; 
         auto checkCW() -> std::vector<std::tuple<int,int>>; 
         auto checkCCW() -> std::vector<std::tuple<int,int>>;
 */
@@ -175,9 +167,6 @@ class Z_Type: public Tetramino {
         
         auto print() -> int; 
 /*
-        auto checkLeft() -> std::vector<std::tuple<int,int>>; 
-        auto checkRight() -> std::vector<std::tuple<int,int>>;
-        auto checkDown() -> std::vector<std::tuple<int,int>>; 
         auto checkCW() -> std::vector<std::tuple<int,int>>; 
         auto checkCCW() -> std::vector<std::tuple<int,int>>;
 */
@@ -198,9 +187,6 @@ class O_Type: public Tetramino {
         
         auto print() -> int; 
 /*
-        auto checkLeft() -> std::vector<std::tuple<int,int>>; 
-        auto checkRight() -> std::vector<std::tuple<int,int>>;
-        auto checkDown() -> std::vector<std::tuple<int,int>>; 
         auto checkCW() -> std::vector<std::tuple<int,int>>; 
         auto checkCCW() -> std::vector<std::tuple<int,int>>;
 */

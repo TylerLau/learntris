@@ -166,6 +166,30 @@ void Matrix::rotateCCW() {
     active_piece -> rotateCCW();
 }
 
+void Matrix::moveLeft() {
+    // USAGE: Check if current active piece can move to left and if it can, move there
+    auto cell_list = active_piece -> checkLeft();
+    if (checkSpaceEmpty(cell_list)) {
+        move(cell_list);
+    }
+}
+
+void Matrix::moveRight() {
+    // USAGE: Check if current active piece can move to right and if it can, move there
+    auto cell_list = active_piece -> checkRight();
+    if (checkSpaceEmpty(cell_list)) {
+        move(cell_list);
+    }
+}
+
+void Matrix::moveDown() {
+    // USAGE: Check if current active piece can move to right and if it can, move there
+    auto cell_list = active_piece -> checkDown();
+    if (checkSpaceEmpty(cell_list)) {
+        move(cell_list);
+    }
+}
+
 //
 // Private member functions
 //
@@ -240,3 +264,33 @@ void Matrix::updateBackup() {
     }
 }
 
+bool Matrix::checkSpaceEmpty(const std::vector<std::tuple<int,int>> & cell_list) {
+    // USAGE: Helper function for checking if cells in a list are occupied
+    for (auto itr = cell_list.begin(); itr != cell_list.end(); ++itr) {
+        int x = std::get<0>(*itr);
+        int y = std::get<1>(*itr);
+        
+        // Check for boundary collision
+        if (x < 0 || x > 21 || y < 0 || y > 9) return false;
+
+        // Check if there is a piece already there
+        if (grid[x][y].checkOccupied() != nullptr && !grid[x][y].isActive()) 
+            return false;
+    }
+    return true;
+}
+
+int Matrix::move(const std::vector<std::tuple<int,int>> & cell_list) {
+    // USAGE: Accepts a tuple vector of new coordinates after a move   
+    auto old_cells = active_piece -> getCells();
+    for (auto itr = old_cells.begin(); itr != old_cells.end(); ++itr) {
+        (*itr) -> remove();
+    }
+    for (auto itr = cell_list.begin(); itr != cell_list.end(); ++itr) {
+        int x = std::get<0>(*itr);
+        int y = std::get<1>(*itr);
+        
+        grid[x][y].assign(active_piece);
+    }
+    return 0;
+}

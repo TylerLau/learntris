@@ -8,6 +8,7 @@
 #include <string>
 #include <cstring>
 #include <algorithm>
+#include <tuple>
 #include "cell.h"
 #include "tetramino.h"
 
@@ -33,12 +34,17 @@ class Matrix {
         auto setActive(char type) -> std::shared_ptr<Tetramino>; 
         void rotateCW();
         void rotateCCW();
+        void moveLeft();
+        void moveRight();
+        void moveDown();
 
     // Private member functions
     private:
         void initGrid();
         void initPiece(char type);
         void updateBackup();
+        bool checkSpaceEmpty(const std::vector<std::tuple<int,int>> & cell_list);
+        int move(const std::vector<std::tuple<int,int>> & cell_list);
 
     // Public member variables
     public:

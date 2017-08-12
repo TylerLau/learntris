@@ -1,4 +1,5 @@
 #include "cell.h"
+#include "tetramino.h"
 
 Cell::Cell() {
     label = ".";
@@ -15,7 +16,7 @@ auto Cell::assign(std::shared_ptr<Tetramino>& obj) -> int {
     else {
         this->label = obj -> type();
         this->current_piece = obj;
-        current_piece -> add(coordinate);
+        current_piece -> add(this);
         return 0;
     }
 }
@@ -24,7 +25,7 @@ auto Cell::remove() -> int {
     // Return: 0 if successful, 1 if not successful
     if (current_piece != nullptr) {
         label = ".";
-        current_piece -> remove(coordinate);
+        current_piece -> remove(this);
         current_piece = nullptr;
         return 0;
     }
@@ -43,3 +44,20 @@ auto Cell::isActive() -> bool {
     if (current_piece != nullptr) temp = (*current_piece).active;
     return temp;
 }
+
+auto Cell::getX() const -> int{
+    // Return: X coordinate
+    return std::get<0>(coordinate);
+}
+
+auto Cell::getY() const -> int{
+    // Return: Y coordinate
+    return std::get<1>(coordinate);
+}
+
+bool Cell::operator==(const Cell & b) const {
+    // USAGE: == operator overload (NOT USED)
+    if (this -> getX() == b.getX() && this -> getY() == b.getY()) return true;
+    else return false;
+}
+

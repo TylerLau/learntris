@@ -6,6 +6,14 @@
 #include <tuple>
 #include "tetramino.h"
 
+// Forward Declaration of Tetrimino
+class Tetramino; 
+    /*public:
+        auto type() -> std::string;
+        auto add(auto _cell) -> int;
+        auto remove(auto _cell) -> int;
+        bool active;*/
+
 class Cell {
     // Public Member Functions
     public:
@@ -20,10 +28,14 @@ class Cell {
         auto checkOccupied()->std::shared_ptr<Tetramino>;
         // Function that returns whether current tetrimino is active
         auto isActive()->bool;
-
+        // Functions that return cell coordinates
+        auto getX() const -> int;
+        auto getY() const -> int;
+        
     // Private Member Functions
     private:
-
+        bool operator==(const Cell & b) const;
+        
     // Public Member Variables
     public:
         // Letter/symbol denoting the type of piece occupying the cell

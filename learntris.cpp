@@ -35,9 +35,9 @@ int main() {
 		
 		else if (x == ')') m.rotateCW();
 		else if (x == '(') m.rotateCCW();
-		//else if (x == '<') m.left();
-		//else if (x == '>') m.right();
-		//else if (x == 'v') m.down();
+		else if (x == '<') m.moveLeft();
+		else if (x == '>') m.moveRight();
+		else if (x == 'v') m.moveDown();
 		//else if (x == 'V') m.hard_down();
 		
 		else if (x == ';') std::cout << std::endl;
