@@ -73,7 +73,7 @@ int Matrix::get_lines() {
 
 void Matrix::step() {
     // USAGE: Checks for filled rows and updates grid accordingly    
-    //int pushes[22] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+    int pushes[22] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     for (int i = 0; i < 22; ++i) {
         // Check if row is completely filled
         bool filled = true;
@@ -85,29 +85,31 @@ void Matrix::step() {
             // Clear the cells in the row
             for (int j = 0; j < 10; ++j) grid[i][j].remove();
             // Increment # of pushes for above rows
-            //for (int x = i-1; x >= 0; ++x) pushes[x]++;
+            for (int x = i-1; x >= 0; --x) pushes[x]++;
             lines += 1;
             score += 100;
         }
-    } 
-
-    updateBackup();
-
-    if (!checkTopEmpty()) game_over = true;
-        
-    /* 
+    }   
+     
     // Update the grid starting from the bottom
     for (int i = 21; i >= 0; --i) {
         if (pushes[i] > 0) {
             // Push everything in current row i to row i + pushes[i] 
             int new_row = i + pushes[i];
+            assert (new_row < 22);
+
             for (int j = 0; j < 10; ++j) {
                 auto temp = grid[i][j].checkOccupied();
-                grid[new_row][j].assign(temp);
-                grid[i][j].remove();
+                if (temp != nullptr) {
+                    grid[new_row][j].assign(temp);
+                    grid[i][j].remove();
+                }
             }
         }
-    }*/
+    }
+
+    updateBackup();
+    if (!checkTopEmpty()) game_over = true;
 }
 
 auto Matrix::setActive(char type) -> std::shared_ptr<Tetramino> {
@@ -160,7 +162,7 @@ auto Matrix::setActive(char type) -> std::shared_ptr<Tetramino> {
 
 void Matrix::rotateCW() {
     // USAGE: Checks if rotation is allowed and do it if it is 
-    if (game_over) return;
+    if (game_over || active_piece == nullptr) return;
     auto cell_list = active_piece -> checkCW();
     if (checkSpaceEmpty(cell_list)) {
         move(cell_list);
@@ -170,7 +172,7 @@ void Matrix::rotateCW() {
 
 void Matrix::rotateCCW() {
     // USAGE: Checks if rotation is allowed and does it if it is
-    if (game_over) return;
+    if (game_over || active_piece == nullptr) return;
     auto cell_list = active_piece -> checkCCW();
     if (checkSpaceEmpty(cell_list)) {
         move(cell_list);
@@ -180,7 +182,7 @@ void Matrix::rotateCCW() {
 
 void Matrix::moveLeft() {
     // USAGE: Check if current active piece can move to left and if it can, move there
-    if (game_over) return;
+    if (game_over || active_piece == nullptr) return;
     auto cell_list = active_piece -> checkLeft();
     if (checkSpaceEmpty(cell_list)) {
         move(cell_list);
@@ -189,7 +191,7 @@ void Matrix::moveLeft() {
 
 void Matrix::moveRight() {
     // USAGE: Check if current active piece can move to right and if it can, move there
-    if (game_over) return;
+    if (game_over || active_piece == nullptr) return;
     auto cell_list = active_piece -> checkRight();
     if (checkSpaceEmpty(cell_list)) {
         move(cell_list);
@@ -198,16 +200,21 @@ void Matrix::moveRight() {
 
 void Matrix::moveDown() {
     // USAGE: Check if current active piece can move to right and if it can, move there
-    if (game_over) return;
+    if (game_over || active_piece == nullptr) return;
     auto cell_list = active_piece -> checkDown();
     if (checkSpaceEmpty(cell_list)) {
         move(cell_list);
+    }
+    else {
+        active_piece -> active = false;
+        active_piece = nullptr;
+        step();
     }
 }
 
 void Matrix::moveHardDown() {
     // USAGE: Moves active piece down until it hits a boundary or another piece
-    if (game_over) return;
+    if (game_over || active_piece == nullptr) return;
     auto cell_list = active_piece -> checkDown();
     while (checkSpaceEmpty(cell_list)) {
         move(cell_list);
