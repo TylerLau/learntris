@@ -2,6 +2,25 @@
 #include <string>
 #include "matrix.h"
 
+int legal() {
+    char z;
+    while (z != '!') {
+        std::cin >> z;
+        if (z == 'p') {
+           std::cout << "Learntris (c) 1992 Tetraminex, Inc.\n" 
+                     << "Press start button to begin.\n";
+        }
+    } 
+    return 0;
+}    
+
+int pause() {
+    std::cout << "Paused\n"
+              << "Press start button to continue.\n";
+    char z;
+    while (z != '!') std::cin >> z;
+}
+
 int main() {
 	
 	Matrix m;
@@ -11,6 +30,9 @@ int main() {
     {
 		std::cin >> x;
 		if (x == 'q') break;
+        else if (x == '@') legal();
+        else if (x == '!') pause();
+
         else if (x == 'p') m.printGrid(false);
         else if (x == 'P') m.printGrid(true);
 		
@@ -38,7 +60,7 @@ int main() {
 		else if (x == '<') m.moveLeft();
 		else if (x == '>') m.moveRight();
 		else if (x == 'v') m.moveDown();
-		//else if (x == 'V') m.hard_down();
+		else if (x == 'V') m.moveHardDown();
 		
 		else if (x == ';') std::cout << std::endl;
 	}

@@ -71,6 +71,20 @@ auto Tetramino::checkDown() -> std::vector<std::tuple<int,int>> {
     return cell_list;
 }
 
+auto Tetramino::rotateHelper(const std::vector<std::vector<std::vector<int>>> & offsets) 
+    -> std::vector<std::tuple<int,int>> {
+
+    std::vector<std::tuple<int,int>> cell_list = {};
+    for (int i = 0; i < 4; ++i) {
+        int x = cells[i] -> getX();
+        int y = cells[i] -> getY();
+        auto temp = std::make_tuple( x + offsets[orientation][i][0],
+                                     y + offsets[orientation][i][1] );
+        cell_list.push_back(temp);
+    }
+    return cell_list;
+}
+
 //------------------------------------------------------------------
 //----------------------------- I TYPE -----------------------------
 //------------------------------------------------------------------
@@ -101,7 +115,23 @@ auto I_Type::print() -> int {
     return 0;
 }
 
+auto I_Type::checkCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets = 
+                   { { {-1, 2}, { 0, 1}, { 1, 0}, { 2,-1} },
+                     { { 2, 1}, { 1, 0}, { 0,-1}, {-1,-2} },
+                     { { 1,-2}, { 0,-1}, {-1, 0}, {-2, 1} },
+                     { {-2,-1}, {-1, 0}, { 0, 1}, { 1, 2} } };
+    return rotateHelper(offsets);
+}
 
+auto I_Type::checkCCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets = 
+                   { { { 2, 1}, { 1, 0}, { 0,-1}, {-1,-2} },
+                     { { 1,-2}, { 0,-1}, {-1, 0}, {-2, 1} },
+                     { {-2,-1}, {-1, 0}, { 0, 1}, { 1, 2} },
+                     { {-1, 2}, { 0, 1}, { 1, 0}, { 2,-1} } };
+    return rotateHelper(offsets);
+}
 
 //------------------------------------------------------------------
 //----------------------------- O TYPE -----------------------------
@@ -115,6 +145,24 @@ O_Type::O_Type(): Tetramino("y") {
 auto O_Type::print() -> int {
     std::cout << "y y\ny y\n";
     return 0;
+}
+
+auto O_Type::checkCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 0, 1}, { 1, 0}, {-1, 0}, { 0,-1} },
+                     { { 1, 0}, { 0,-1}, { 0, 1}, {-1, 0} },
+                     { { 0,-1}, {-1, 0}, { 1, 0}, { 0, 1} },
+                     { {-1, 0}, { 0, 1}, { 0,-1}, { 1, 0} } };
+    return rotateHelper(offsets);
+}
+
+auto O_Type::checkCCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 1, 0}, { 0,-1}, { 0, 1}, {-1, 0} },
+                     { { 0,-1}, {-1, 0}, { 1, 0}, { 0, 1} },
+                     { {-1, 0}, { 0, 1}, { 0,-1}, { 1, 0} },
+                     { { 0, 1}, { 1, 0}, {-1, 0}, { 0,-1} } };
+    return rotateHelper(offsets);
 }
 
 //------------------------------------------------------------------
@@ -146,7 +194,23 @@ auto Z_Type::print() -> int {
     }
     return 0;
 }
+auto Z_Type::checkCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 0, 2}, { 1, 1}, { 0, 0}, { 1,-1} },
+                     { { 2, 0}, { 1,-1}, { 0, 0}, {-1,-1} },
+                     { { 0,-2}, {-1,-1}, { 0, 0}, {-1, 1} },
+                     { {-2, 0}, {-1, 1}, { 0, 0}, { 1, 1} } };
+    return rotateHelper(offsets);
+}
 
+auto Z_Type::checkCCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 2, 0}, { 1,-1}, { 0, 0}, {-1,-1} },
+                     { { 0,-2}, {-1,-1}, { 0, 0}, {-1, 1} },
+                     { {-2, 0}, {-1, 1}, { 0, 0}, { 1, 1} },
+                     { { 0, 2}, { 1, 1}, { 0, 0}, { 1,-1} } };
+    return rotateHelper(offsets);
+}
 //------------------------------------------------------------------
 //----------------------------- S TYPE -----------------------------
 //------------------------------------------------------------------
@@ -175,6 +239,24 @@ auto S_Type::print() -> int {
             break;
     }
     return 0;
+}
+
+auto S_Type::checkCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 1, 1}, { 2, 0}, {-1, 1}, { 0, 0} },
+                     { { 1,-1}, { 0,-2}, { 1, 1}, { 0, 0} },
+                     { {-1,-1}, {-2, 0}, { 1,-1}, { 0, 0} },
+                     { {-1, 1}, { 0, 2}, {-1,-1}, { 0, 0} } };
+    return rotateHelper(offsets);
+}
+
+auto S_Type::checkCCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 1,-1}, { 0,-2}, { 1, 1}, { 0, 0} },
+                     { {-1,-1}, {-2, 0}, { 1,-1}, { 0, 0} },
+                     { {-1, 1}, { 0, 2}, {-1,-1}, { 0, 0} },
+                     { { 1, 1}, { 2, 0}, {-1, 1}, { 0, 0} } };
+    return rotateHelper(offsets);
 }
 
 //------------------------------------------------------------------
@@ -207,6 +289,24 @@ auto J_Type::print() -> int {
     return 0;
 }
 
+auto J_Type::checkCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 0, 2}, {-1, 1}, { 0, 0}, { 1,-1} },
+                     { { 2, 0}, { 1, 1}, { 0, 0}, {-1,-1} },
+                     { { 0,-2}, { 1,-1}, { 0, 0}, {-1, 1} },
+                     { {-2, 0}, {-1,-1}, { 0, 0}, { 1, 1} } };
+    return rotateHelper(offsets);
+}
+
+auto J_Type::checkCCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 2, 0}, { 1, 1}, { 0, 0}, {-1,-1} },
+                     { { 0,-2}, { 1,-1}, { 0, 0}, {-1, 1} },
+                     { {-2, 0}, {-1,-1}, { 0, 0}, { 1, 1} },
+                     { { 0, 2}, {-1, 1}, { 0, 0}, { 1,-1} } };
+    return rotateHelper(offsets);
+}
+
 //------------------------------------------------------------------
 //----------------------------- L TYPE -----------------------------
 //------------------------------------------------------------------
@@ -237,6 +337,23 @@ auto L_Type::print() -> int {
     return 0;
 }
 
+auto L_Type::checkCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 2, 0}, {-1, 1}, { 0, 0}, { 1,-1} },
+                     { { 0,-2}, { 1, 1}, { 0, 0}, {-1,-1} },
+                     { {-2, 0}, { 1,-1}, { 0, 0}, {-1, 1} },
+                     { { 0, 2}, {-1,-1}, { 0, 0}, { 1, 1} } };
+    return rotateHelper(offsets);
+}
+auto L_Type::checkCCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 0,-2}, { 1, 1}, { 0, 0}, {-1,-1} },
+                     { {-2, 0}, { 1,-1}, { 0, 0}, {-1, 1} },
+                     { { 0, 2}, {-1,-1}, { 0, 0}, { 1, 1} },
+                     { { 2, 0}, {-1, 1}, { 0, 0}, { 1,-1} } };
+    return rotateHelper(offsets);
+}
+
 //------------------------------------------------------------------
 //----------------------------- T TYPE -----------------------------
 //------------------------------------------------------------------
@@ -265,4 +382,22 @@ auto T_Type::print() -> int {
             break;
     }
     return 0;
+}
+
+auto T_Type::checkCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 1, 1}, {-1, 1}, { 0, 0}, { 1,-1} },
+                     { { 1,-1}, { 1, 1}, { 0, 0}, {-1,-1} },
+                     { {-1,-1}, { 1,-1}, { 0, 0}, {-1, 1} },
+                     { {-1, 1}, {-1,-1}, { 0, 0}, { 1, 1} } };
+    return rotateHelper(offsets);
+}
+
+auto T_Type::checkCCW() -> std::vector<std::tuple<int,int>> {
+    std::vector<std::vector<std::vector<int>>> offsets =
+                   { { { 1,-1}, { 1, 1}, { 0, 0}, {-1,-1} },
+                     { {-1,-1}, { 1,-1}, { 0, 0}, {-1, 1} },
+                     { {-1, 1}, {-1,-1}, { 0, 0}, { 1, 1} },
+                     { { 1, 1}, {-1, 1}, { 0, 0}, { 1,-1} } };
+    return rotateHelper(offsets);
 }

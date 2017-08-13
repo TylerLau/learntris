@@ -32,6 +32,7 @@ void Matrix::printGrid(bool mode) {
             std::cout << std::endl;
          }
     }
+    if (game_over) std::cout << "Game Over\n";
 }
 
 void Matrix::printActive() {
@@ -41,6 +42,7 @@ void Matrix::printActive() {
 
 void Matrix::given() {
     // USAGE: Allows an input stream of 22 characters to set table
+    initGrid();
     for (int i = 0; i < 22; i++) {
         for (int j = 0; j < 10; j++) {
             std::string temp;
@@ -91,6 +93,8 @@ void Matrix::step() {
 
     updateBackup();
 
+    if (!checkTopEmpty()) game_over = true;
+        
     /* 
     // Update the grid starting from the bottom
     for (int i = 21; i >= 0; --i) {
@@ -107,7 +111,11 @@ void Matrix::step() {
 }
 
 auto Matrix::setActive(char type) -> std::shared_ptr<Tetramino> {
-    if (active_piece != nullptr) active_piece->active = false;
+    if (game_over) return nullptr;
+    if (active_piece != nullptr) {
+        active_piece->active = false;
+        active_piece = nullptr;
+    }
     switch(type) {
         case 'I':
             active_piece = std::make_shared<I_Type>();
@@ -151,23 +159,28 @@ auto Matrix::setActive(char type) -> std::shared_ptr<Tetramino> {
 }   
 
 void Matrix::rotateCW() {
-    //Check if movement is valid first
-    //auto spaces = active_piece -> checkCW();
-    //If any of the spaces don't return nullptr for cell->checkOccupied don't rotate
-    
-    active_piece -> rotateCW();
+    // USAGE: Checks if rotation is allowed and do it if it is 
+    if (game_over) return;
+    auto cell_list = active_piece -> checkCW();
+    if (checkSpaceEmpty(cell_list)) {
+        move(cell_list);
+        active_piece -> rotateCW();
+    }
 }
 
 void Matrix::rotateCCW() {
-    //Check if movement is valid first
-    //auto spaces = active_piece -> checkCCW();
-    //If any of the spaces don't return nullptr for cell->checkOccupied don't rotate
-    
-    active_piece -> rotateCCW();
+    // USAGE: Checks if rotation is allowed and does it if it is
+    if (game_over) return;
+    auto cell_list = active_piece -> checkCCW();
+    if (checkSpaceEmpty(cell_list)) {
+        move(cell_list);
+        active_piece -> rotateCCW();
+    }
 }
 
 void Matrix::moveLeft() {
     // USAGE: Check if current active piece can move to left and if it can, move there
+    if (game_over) return;
     auto cell_list = active_piece -> checkLeft();
     if (checkSpaceEmpty(cell_list)) {
         move(cell_list);
@@ -176,6 +189,7 @@ void Matrix::moveLeft() {
 
 void Matrix::moveRight() {
     // USAGE: Check if current active piece can move to right and if it can, move there
+    if (game_over) return;
     auto cell_list = active_piece -> checkRight();
     if (checkSpaceEmpty(cell_list)) {
         move(cell_list);
@@ -184,10 +198,24 @@ void Matrix::moveRight() {
 
 void Matrix::moveDown() {
     // USAGE: Check if current active piece can move to right and if it can, move there
+    if (game_over) return;
     auto cell_list = active_piece -> checkDown();
     if (checkSpaceEmpty(cell_list)) {
         move(cell_list);
     }
+}
+
+void Matrix::moveHardDown() {
+    // USAGE: Moves active piece down until it hits a boundary or another piece
+    if (game_over) return;
+    auto cell_list = active_piece -> checkDown();
+    while (checkSpaceEmpty(cell_list)) {
+        move(cell_list);
+        cell_list = active_piece -> checkDown();
+    }
+    active_piece -> active = false;
+    active_piece = nullptr;
+    step();
 }
 
 //
@@ -202,6 +230,8 @@ void Matrix::initGrid() {
             grid[i][j].setCoordinates(i,j);
         }
     }
+    active_piece = nullptr;
+    game_over = false;
     updateBackup();
 }
 
@@ -276,6 +306,16 @@ bool Matrix::checkSpaceEmpty(const std::vector<std::tuple<int,int>> & cell_list)
         // Check if there is a piece already there
         if (grid[x][y].checkOccupied() != nullptr && !grid[x][y].isActive()) 
             return false;
+    }
+    return true;
+}
+
+bool Matrix::checkTopEmpty() {
+    // USAGE: Helper function to check top rows before setting new active piece
+    for (int i = 0; i < 2; ++i) {
+        for (int j = 0; j < 10; ++j) {
+            if (grid[i][j].checkOccupied() != nullptr) return false;
+        }
     }
     return true;
 }

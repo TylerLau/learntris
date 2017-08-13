@@ -37,6 +37,7 @@ class Matrix {
         void moveLeft();
         void moveRight();
         void moveDown();
+        void moveHardDown();
 
     // Private member functions
     private:
@@ -44,7 +45,9 @@ class Matrix {
         void initPiece(char type);
         void updateBackup();
         bool checkSpaceEmpty(const std::vector<std::tuple<int,int>> & cell_list);
+        bool checkTopEmpty();
         int move(const std::vector<std::tuple<int,int>> & cell_list);
+        
 
     // Public member variables
     public:
@@ -53,7 +56,7 @@ class Matrix {
     private:
         int lines;      // # of lines cleared
         int score;      // User score
-        
+        bool game_over; 
         // Pointer to the current active piece
         std::shared_ptr<Tetramino> active_piece;
 
